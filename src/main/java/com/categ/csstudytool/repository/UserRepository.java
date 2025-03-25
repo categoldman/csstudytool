@@ -1,12 +1,11 @@
 package com.categ.csstudytool.repository;
 
 import com.categ.csstudytool.model.User;
-import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface UserRepository extends JpaRepository<User, Long> {
 
     User findByEmail(String email);
-    User findByEmailAndPassword(String email, String password);
 
 
 }
