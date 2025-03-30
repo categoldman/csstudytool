@@ -9,6 +9,7 @@ import org.springframework.security.core.GrantedAuthority;
 import javax.crypto.SecretKey;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Date;
 
 public class JwtProvider {
 
