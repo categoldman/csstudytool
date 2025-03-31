@@ -31,6 +31,7 @@ public class AuthController {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @Autowired
     private CustomUserDetailsImpl customUserDetails;
 
     @PostMapping("/signup")
