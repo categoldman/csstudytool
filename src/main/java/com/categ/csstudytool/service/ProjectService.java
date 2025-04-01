@@ -1,5 +1,6 @@
 package com.categ.csstudytool.service;
 
+import com.categ.csstudytool.model.Chat;
 import com.categ.csstudytool.model.Project;
 import com.categ.csstudytool.model.User;
 
