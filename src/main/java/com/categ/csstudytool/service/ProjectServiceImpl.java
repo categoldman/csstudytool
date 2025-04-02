@@ -3,12 +3,20 @@ package com.categ.csstudytool.service;
 import com.categ.csstudytool.model.Chat;
 import com.categ.csstudytool.model.Project;
 import com.categ.csstudytool.model.User;
+import com.categ.csstudytool.repository.ProjectRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
 public class ProjectServiceImpl implements ProjectService{
+
+
+
+    @Autowired
+    private ProjectRepository projectRepository;
+
     @Override
     public Project createProject(Project project, User user) throws Exception {
         return null;

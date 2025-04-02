@@ -18,6 +18,7 @@ public class User {
     private String fullName;
     private String email;
     private String password;
+    private int projectSize;
 
     @JsonIgnore
     @OneToMany(mappedBy = "assignee",cascade=CascadeType.ALL)
