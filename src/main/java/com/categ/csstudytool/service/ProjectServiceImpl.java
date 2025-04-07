@@ -111,4 +111,11 @@ public class ProjectServiceImpl implements ProjectService{
         Project project = getProjectById(projectId);
         return project.getChat();
     }
+
+    @Override
+    public List<Project> searchProjects(String keyword, User user) throws Exception {
+        String partialName="%"+keyword+"%";
+        return projectRepository.findByNameContainingAndTeamContains(partialName, user);
+    }
+
 }
