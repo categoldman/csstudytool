@@ -7,10 +7,7 @@ import com.categ.csstudytool.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -23,6 +20,8 @@ public class ProjectController {
     @Autowired
     private UserService userService;
 
+
+    @GetMapping
     public ResponseEntity<List<Project>>getProjects(
             @RequestParam(required = false)String category,
             @RequestParam(required = false)String tag,
@@ -33,5 +32,45 @@ public class ProjectController {
         return new ResponseEntity<>(projects, HttpStatus.OK);
     }
 
+    @GetMapping("/{projectId}")
+    public ResponseEntity<Project>getProjectById(
+            @PathVariable Long projectId,
+            @RequestHeader("Authorization") String jwt
+    ) throws Exception {
+        User user = userService.findUserProfileByJwt(jwt);
+        Project project = projectService.getProjectById(projectId);
+        return new ResponseEntity<>(project, HttpStatus.OK);
+    }
+
+    @PostMapping()
+    public ResponseEntity<Project>createProject(
+            @RequestHeader("Authorization") String jwt,
+            @RequestBody Project project
+    ) throws Exception {
+        User user = userService.findUserProfileByJwt(jwt);
+        Project createdproject = projectService.createProject(project, user);
+        return new ResponseEntity<>(createdproject, HttpStatus.OK);
+    }
+
+    @PatchMapping("/{projectId}")
+    public ResponseEntity<Project>updateProject(
+            @PathVariable Long projectId,
+            @RequestHeader("Authorization") String jwt,
+            @RequestBody Project project
+    ) throws Exception {
+        User user = userService.findUserProfileByJwt(jwt);
+        Project updatedProject = projectService.updateProject(project, projectId);
+        return new ResponseEntity<>(updatedProject, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{projectId}")
+    public ResponseEntity<Project>deleteProject(
+            @PathVariable Long projectId,
+            @RequestHeader("Authorization") String jwt,
+    ) throws Exception {
+        User user = userService.findUserProfileByJwt(jwt);
+        projectService.deleteProject(projectId, user.getId());
+        return new ResponseEntity<>(deletedProject, HttpStatus.OK);
+    }
 
 }
