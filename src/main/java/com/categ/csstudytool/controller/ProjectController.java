@@ -1,5 +1,6 @@
 package com.categ.csstudytool.controller;
 
+import com.categ.csstudytool.model.Chat;
 import com.categ.csstudytool.model.Project;
 import com.categ.csstudytool.model.User;
 import com.categ.csstudytool.response.MessageResponse;
@@ -75,5 +76,24 @@ public class ProjectController {
         return new ResponseEntity<>(res, HttpStatus.OK);
     }
 
+    @GetMapping("/search")
+    public ResponseEntity<List<Project>>searchProjects(
+            @RequestParam(required = false)String keyword,
+            @RequestHeader("Authorization") String jwt
+    ) throws Exception {
+        User user = userService.findUserProfileByJwt(jwt);
+        List<Project> projects=projectService.searchProjects(keyword, user);
+        return new ResponseEntity<>(projects, HttpStatus.OK);
+    }
+
+    @GetMapping("/{projectId}/chat")
+    public ResponseEntity<Chat>getChatByProjectById(
+            @PathVariable Long projectId,
+            @RequestHeader("Authorization") String jwt
+    ) throws Exception {
+        User user = userService.findUserProfileByJwt(jwt);
+        Chat chat = projectService.getChatByProjectId(projectId);
+        return new ResponseEntity<>(chat, HttpStatus.OK);
+    }
 
 }
