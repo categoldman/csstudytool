@@ -2,6 +2,7 @@ package com.categ.csstudytool.controller;
 
 import com.categ.csstudytool.model.Project;
 import com.categ.csstudytool.model.User;
+import com.categ.csstudytool.response.MessageResponse;
 import com.categ.csstudytool.service.ProjectService;
 import com.categ.csstudytool.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -64,13 +65,15 @@ public class ProjectController {
     }
 
     @DeleteMapping("/{projectId}")
-    public ResponseEntity<Project>deleteProject(
+    public ResponseEntity<MessageResponse>deleteProject(
             @PathVariable Long projectId,
-            @RequestHeader("Authorization") String jwt,
+            @RequestHeader("Authorization") String jwt
     ) throws Exception {
         User user = userService.findUserProfileByJwt(jwt);
         projectService.deleteProject(projectId, user.getId());
-        return new ResponseEntity<>(deletedProject, HttpStatus.OK);
+        MessageResponse res = new MessageResponse("project deleted successfully");
+        return new ResponseEntity<>(res, HttpStatus.OK);
     }
+
 
 }
