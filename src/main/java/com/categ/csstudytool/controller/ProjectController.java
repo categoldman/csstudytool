@@ -1,9 +1,12 @@
 package com.categ.csstudytool.controller;
 
 import com.categ.csstudytool.model.Chat;
+import com.categ.csstudytool.model.Invitation;
 import com.categ.csstudytool.model.Project;
 import com.categ.csstudytool.model.User;
+import com.categ.csstudytool.repository.InviteRequest;
 import com.categ.csstudytool.response.MessageResponse;
+import com.categ.csstudytool.service.InvitationService;
 import com.categ.csstudytool.service.ProjectService;
 import com.categ.csstudytool.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +25,8 @@ public class ProjectController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private InvitationService invitationService;
 
     @GetMapping
     public ResponseEntity<List<Project>>getProjects(
@@ -96,4 +101,27 @@ public class ProjectController {
         return new ResponseEntity<>(chat, HttpStatus.OK);
     }
 
+    @PostMapping("/invite")
+    public ResponseEntity<MessageResponse>inviteProject(
+            @RequestBody InviteRequest req,
+            @RequestHeader("Authorization") String jwt,
+            @RequestBody Project project
+    ) throws Exception {
+        User user = userService.findUserProfileByJwt(jwt);
+        invitationService.sendInvitation(req.getEmail(), req.getProjectId());
+        MessageResponse res = new MessageResponse("invited successfully");
+        return new ResponseEntity<>(res, HttpStatus.OK);
+    }
+
+    @GetMapping("/accept_invitation")
+    public ResponseEntity<Invitation>acceptInviteProject(
+            @RequestParam String token,
+            @RequestHeader("Authorization") String jwt,
+            @RequestBody Project project
+    ) throws Exception {
+        User user = userService.findUserProfileByJwt(jwt);
+        Invitation invitation = invitationService.acceptInvitation(token, user.getId());
+        projectService.addUserToProject(invitation.getProjectId(), user.getId());
+        return new ResponseEntity<>(invitation, HttpStatus.ACCEPTED);
+    }
 }
